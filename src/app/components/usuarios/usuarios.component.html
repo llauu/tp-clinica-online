@@ -1,0 +1,105 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <h1 class="title-users text-center">Usuarios</h1>
+        <div class="tables">
+            <h2 class="title-table">Pacientes</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>DNI</th>
+                        <th>Edad</th>
+                        <th>Obra social</th>
+                        <th>Correo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let p of pacientes">
+                        <td>{{ p.nombre }}</td>
+                        <td>{{ p.apellido }}</td>
+                        <td>{{ p.dni }}</td>
+                        <td>{{ p.edad }}</td>
+                        <td>{{ p.obraSocial }}</td>
+                        <td>{{ p.mail }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 class="title-table">Especialistas</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>DNI</th>
+                        <th>Edad</th>
+                        <th>Especialidad</th>
+                        <th>Correo</th>
+                        <th>Habilitado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let e of especialistas">
+                        <td>{{ e.nombre }}</td>
+                        <td>{{ e.apellido }}</td>
+                        <td>{{ e.dni }}</td>
+                        <td>{{ e.edad }}</td>
+                        <td>{{ e.especialidad }}</td>
+                        <td>{{ e.mail }}</td>
+                        <td>
+                            @if (e.habilitado) {
+                                <div class="d-flex justify-content-between">
+                                    <img src="../../../assets/check.png" class="check-uncheck" alt="Si" (click)="cambiarHabilitacion(e)">
+                                </div>
+                            } @else {
+                                <div class="d-flex justify-content-between">
+                                 <img src="../../../assets/uncheck.png" class="check-uncheck" alt="No" (click)="cambiarHabilitacion(e)">
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 class="title-table">Administradores</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>DNI</th>
+                        <th>Edad</th>
+                        <th>Correo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let a of admins">
+                        <td>{{ a.nombre }}</td>
+                        <td>{{ a.apellido }}</td>
+                        <td>{{ a.dni }}</td>
+                        <td>{{ a.edad }}</td>
+                        <td>{{ a.mail }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+
+
+
+        </div>
+    </div>
+</div>
+
+<!-- <div class="container d-flex justify-content-around mt-5">
+    <div class="jumbotron">
+      <h5>Detalle repartidor</h5>
+      <app-detalle-repartidor [repartidor]="repartidorSeleccionado"></app-detalle-repartidor>
+    </div>
+    <div class="jumbotron">
+      <h5>Detalle pais</h5>
+      <app-detalle-pais [pais]="paisSeleccionado"></app-detalle-pais>
+    </div>
+</div> -->

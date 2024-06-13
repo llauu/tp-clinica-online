@@ -1,1 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'ngx-toastr/toastr';
+
+.main {
+    background-color: #e7e7e7;
+    height: 100%;
+    font-family: "Radio Canada Big", sans-serif;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    min-height: 100vh; position: relative; z-index: 1;
+}

@@ -1,0 +1,37 @@
+.ruta-activa {
+    font-weight: 600;
+    color: #000;
+}
+
+.custom-nav {
+    height: 70px;
+    /* background-color: #89ffd0; */
+    background-color: #85ebff;
+    transition: all;
+    padding: 0px 10px;
+    z-index: 2;
+    position: fixed;
+    width: 100%;
+}
+
+.nav-opt {
+    background-color: #85ebff;
+    cursor: pointer;
+    z-index: 2;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.icono {
+    width: 42px;
+}
+
+.tit-icono {
+    color: #cd1c2a;
+    font-weight: 600;
+}
+
+
+.tit-icono-2 {
+    color: #154688;
+}

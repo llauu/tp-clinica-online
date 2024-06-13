@@ -1,0 +1,16 @@
+.main-bienv {
+    height: 100vh;
+}
+
+.info-main {   
+    width: 50%;
+}
+
+.tit-main {
+    font-size: 70px;
+}
+
+.btn-custom {
+    height: 55px;
+    width: 180px;
+}

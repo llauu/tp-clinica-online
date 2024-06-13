@@ -1,0 +1,14 @@
+.title-users {
+    margin-top: 130px;
+    font-size: 55px;
+}
+
+.title-table {
+    margin-top: 100px;
+}
+
+.check-uncheck {
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+}
