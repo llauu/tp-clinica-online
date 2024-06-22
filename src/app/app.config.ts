@@ -12,6 +12,8 @@ import { environment } from '../environments/environment';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 
+import { provideHttpClient } from '@angular/common/http';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
@@ -30,5 +32,6 @@ export const appConfig: ApplicationConfig = {
     provideStorage(() => getStorage(getApp(),"gs://tp-clinica-online-5cb54.appspot.com")),
     provideAnimations(), // required animations providers
     provideToastr(), // Toastr providers
+    provideHttpClient(),
   ],
 };

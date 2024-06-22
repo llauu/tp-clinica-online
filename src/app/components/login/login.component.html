@@ -2,6 +2,7 @@
 <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-5 login-container">
+        <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="medium" color="#fff" type="ball-clip-rotate"></ngx-spinner>
         <div class="card shadow mt-4">
           <div class="card-header">
             <h1 class="text-center my-3">Inicio de sesion</h1>
@@ -21,12 +22,8 @@
                 <p class="error-msg">{{errorMsg}}</p>
               }
 
-              <div class="d-flex justify-content-center mt-5">
+              <div class="d-flex justify-content-center my-5">
                 <button type="submit" class="btn btn-primary btn-block btn-login" (click)="login()">Iniciar sesion</button>
-              </div>
-              <div class="text-center mb-3">
-                <button type="button" class="btn btn-link" (click)="fillInputs('especialista@mail.com', '123especialista')">Especialista</button>
-                <button type="button" class="btn btn-link" (click)="fillInputs('paciente@mail.com', '123paciente')">Paciente</button>
               </div>
             </form>
             <div class="border-bottom"></div>
@@ -36,6 +33,38 @@
             </div>
           </div>
         </div>
+        
+        
+        <div>
+          <div class="d-flex justify-content-center mt-5">
+            <button type="button" class="btn-acc-rap mx-3 mt-5 shadow" (click)="fillInputs('mawivor378@luravell.com', '123lauty')">
+              <img class="img-acc-rap" src="../../../assets/paciente1.jpg" alt="Paciente">
+              <p class="p-acc-rap">Paciente</p>
+            </button>
+            <button type="button" class="btn-acc-rap mx-3 mt-5 shadow" (click)="fillInputs('augmore@yopmail.com', '123augusto')">
+              <img class="img-acc-rap" src="../../../assets/paciente2.jpg" alt="Paciente">
+              <p class="p-acc-rap">Paciente</p>
+            </button>
+            <button type="button" class="btn-acc-rap mx-3 mt-5 shadow" (click)="fillInputs('kikimarti@yopmail.com', '123kiki')">
+              <img class="img-acc-rap" src="../../../assets/paciente3.jpg" alt="Paciente">
+              <p class="p-acc-rap">Paciente</p>
+            </button>
+            <button type="button" class="btn-acc-rap mx-3 mt-5 shadow" (click)="fillInputs('agusclas@yopmail.com', '123agus')">
+              <img class="img-acc-rap" src="../../../assets/especialista1.jpg" alt="Especialista">
+              <p class="p-acc-rap">Especialista</p>
+            </button>
+            <button type="button" class="btn-acc-rap mx-3 mt-5 shadow" (click)="fillInputs('saramalacara@yopmail.com', '123sara')">
+              <img class="img-acc-rap" src="../../../assets/especialista1.jpg" alt="Especialista">
+              <p class="p-acc-rap">Especialista</p>
+            </button>
+            <button type="button" class="btn-acc-rap mx-3 mt-5 shadow" (click)="fillInputs('lautaroadmin@yopmail.com', '123admin')">
+              <img class="img-acc-rap" src="../../../assets/admin.png" alt="Admin">
+              <p class="p-acc-rap">Admin</p>
+            </button>
+          </div>
+        </div>
+
+
       </div>
     </div>
 </div>

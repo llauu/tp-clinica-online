@@ -1,0 +1,30 @@
+.error-msg {
+    position: absolute;
+    font-size: 15px;
+    margin: 0;
+}
+
+.errorMsg {
+    color: red;
+    font-size: 15px;
+    margin: 0;
+
+}
+
+.card-header {
+    background-color: #E4E4E4;
+    border: none;
+}
+
+.card-top {
+    margin-top: 80px;
+}
+
+.card-custom {
+    height: 300px;
+}
+
+.btn-sel {
+    width: 280px;
+    height: 70px;
+}

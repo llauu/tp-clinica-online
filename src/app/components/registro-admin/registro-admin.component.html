@@ -1,0 +1,143 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="medium" color="#fff" type="ball-clip-rotate"></ngx-spinner>
+        <div class="col-md-10 reg-container card-top">
+        <div class="card shadow mt-5">
+            <div class="card-header">
+                <h1 class="text-center mt-3">Registro </h1>
+                <h2 class="text-center" *ngIf="rol == 'paciente'">Paciente</h2>
+                <h2 class="text-center" *ngIf="rol == 'especialista'">Especialista</h2>
+                <h2 class="text-center" *ngIf="rol == 'admin'">Administrador</h2>
+            </div>
+            <div class="card-body d-flex flex-column justify-content-center align-items-center" *ngIf="regPaciente == null">
+                <h4 class="my-4">¿Que desea registrar?</h4>
+                <div class="container d-flex justify-content-center my-3">
+                    <button class="btn btn-primary col-4 mx-3" class="btn-sel mx-4" (click)="configReg('paciente')">
+                        <img src="../../../assets/paciente.jpg" class="img-btn-sel" alt="Paciente">
+                    </button>
+                    <button class="btn btn-primary col-4 mx-3" class="btn-sel mx-4" (click)="configReg('especialista')">
+                        <img src="../../../assets/doctor.jpg" class="img-btn-sel" alt="Especialista">
+                    </button>
+                    <button class="btn btn-primary col-4 mx-3" class="btn-sel mx-4" (click)="configReg('admin')">
+                        <img src="../../../assets/admin.png" class="img-btn-sel" alt="Administrador">
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-body" *ngIf="regPaciente != null">
+                <form [formGroup]="form" (ngSubmit)="register()" class="d-flex justify-content-center row">
+                    <div class="col-6 my-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" [formControl]="form.controls.nombre">
+                        <div class="text-danger mt-1" *ngIf="form.get('nombre')?.touched">
+                            <p *ngIf="form.controls.nombre.getError('required')" class="error-msg">El nombre es requerido.</p>
+                            <p *ngIf="form.controls.nombre.getError('pattern')" class="error-msg">El nombre solo puede contener letras.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-6 my-3">
+                        <label for="apellido" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="apellido" [formControl]="form.controls.apellido">
+                        <div class="text-danger mt-1" *ngIf="form.get('apellido')?.touched">
+                            <p *ngIf="form.controls.apellido.getError('required')" class="error-msg">El apellido es requerido.</p>
+                            <p *ngIf="form.controls.apellido.getError('pattern')" class="error-msg">El apellido solo puede contener letras.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-6 my-3">
+                        <label for="edad" class="form-label">Edad</label>
+                        <input type="text" class="form-control" id="edad" [formControl]="form.controls.edad">
+                        <div class="text-danger mt-1" *ngIf="form.get('edad')?.touched">
+                            <p *ngIf="form.controls.edad.getError('required')" class="error-msg">El edad es requerida.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-6 my-3">
+                        <label for="dni" class="form-label">DNI</label>
+                        <input type="text" class="form-control" id="dni" [formControl]="form.controls.dni">
+                        <div class="text-danger mt-1" *ngIf="form.get('dni')?.touched">
+                            <p *ngIf="form.controls.dni.getError('required')" class="error-msg">El DNI es requerido.</p>
+                            <p *ngIf="form.controls.dni.getError('pattern')" class="error-msg">El DNI no es valido.</p>
+                            <p *ngIf="form.controls.dni.getError('dniExiste')" class="error-msg">El DNI ya esta registrado.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-6 my-3" *ngIf="regPaciente">
+                        <label for="obraSocial" class="form-label">Obra social</label>
+                        <input type="text" class="form-control" id="obraSocial" [formControl]="form.controls.obraSocial">
+                        <div class="text-danger" *ngIf="form.get('obraSocial')?.touched">
+                            <p *ngIf="form.controls.obraSocial.getError('required')" class="error-msg">La obra social es requerida.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-6 my-3" *ngIf="rol == 'especialista'">
+                        <label for="especialidad" class="form-label">Especialidad</label>
+                        <select name="especialidad" id="especialidad" class="form-control" [formControl]="form.controls.especialidad">
+                            @for (e of especialidades; track $index) {
+                                <option value="{{e.nombre}}">{{e.nombre}}</option>
+                            }
+                        </select>
+                        <div class="text-danger" *ngIf="form.get('especialidad')?.touched">
+                            <p *ngIf="form.controls.especialidad.getError('required')" class="error-msg">La especialidad es requerida.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-6 my-3" *ngIf="rol == 'especialista'">
+                        <label for="especialidad" class="form-label">Agregar especialidad</label>
+                        <div class="row">
+                            <input type="text" class="form-control w-50 ms-3" id="nuevaEspecialidad">
+                            <button type="button" class="btn btn-primary w-25 ms-3" (click)="agregarEspecialidad()">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="col-6 my-3">
+                        <label for="mail" class="form-label">Correo electronico</label>
+                        <input type="text" class="form-control" id="mail" [formControl]="form.controls.mail">
+                        <div class="text-danger" *ngIf="form.get('mail')?.touched">
+                            <p *ngIf="form.controls.mail.getError('required')" class="error-msg">El correo es requerido.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-6 my-3">
+                        <label for="pass" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="pass" [formControl]="form.controls.pass">
+                        <div class="text-danger" *ngIf="form.get('pass')?.touched">
+                            <p *ngIf="form.controls.pass.getError('required')" class="error-msg">La contraseña es requerida.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-6 my-3">
+                        <label for="passRep" class="form-label">Repite contraseña</label>
+                        <input type="password" class="form-control" id="passRep" [formControl]="form.controls.passRep">
+                        <div class="text-danger" *ngIf="form.get('passRep')?.touched">
+                            <p *ngIf="form.controls.passRep.getError('required')" class="error-msg">La contraseña es requerida.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-6 my-3">
+                        <label for="foto1" class="form-label">Imagen uno</label>
+                        <input type="file" class="form-control" id="foto1" (change)="onFileSelected($event, 'imagenUno')" [formControl]="form.controls.imagenUno">
+                        <div class="text-danger" *ngIf="form.get('imagenUno')?.touched">
+                            <label *ngIf="form.controls.imagenUno.getError('required')" class="error-msg">La imagen es requerida.</label>
+                        </div>
+                    </div>
+                    
+                    <div class="col-6 my-3" *ngIf="regPaciente">
+                        <label for="foto2" class="form-label">Imagen dos</label>
+                        <input type="file" class="form-control" id="foto2" (change)="onFileSelected($event, 'imagenDos')" [formControl]="form.controls.imagenDos">
+                        <div class="text-danger" *ngIf="form.get('imagenDos')?.touched">
+                            <p *ngIf="form.controls.imagenDos.getError('required')" class="error-msg">La imagen es requerida.</p>
+                        </div>
+                    </div>
+
+                    <p *ngIf="errorMsg != ''" class="errorMsg">{{errorMsg}}</p>
+
+                    <button [disabled]="form.invalid" type="submit" class="btn btn-primary mt-5 mb-4 col-10">Dar de alta</button>
+                    <button type="button" class="btn btn-danger mb-3 col-10" (click)="cancelarRegistro()">Cancelar</button>
+                </form>
+                
+            </div>
+        </div>
+        </div>
+    </div>
+</div>

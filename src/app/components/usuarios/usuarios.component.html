@@ -1,97 +1,120 @@
 <div class="container">
     <div class="row justify-content-center">
-        <h1 class="title-users text-center">Usuarios</h1>
-        <div class="tables">
-            <h2 class="title-table">Pacientes</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>DNI</th>
-                        <th>Edad</th>
-                        <th>Obra social</th>
-                        <th>Correo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let p of pacientes">
-                        <td>{{ p.nombre }}</td>
-                        <td>{{ p.apellido }}</td>
-                        <td>{{ p.dni }}</td>
-                        <td>{{ p.edad }}</td>
-                        <td>{{ p.obraSocial }}</td>
-                        <td>{{ p.mail }}</td>
-                    </tr>
-                </tbody>
-            </table>
+        <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="medium" color="#fff" type="ball-clip-rotate"></ngx-spinner>
+        <div class="col-12 reg-container card-top mb-5">
+        <div class="card shadow mt-5">
+            <div class="card-header">
+                <h1 class="title-users text-center my-5">Usuarios</h1>
+            </div>
+            <div class="card-body d-flex flex-column justify-content-center align-items-center mt-5">
+                <div class="tables col-10">
+                    <h2 class="title-table">Pacientes</h2>
+                    <div class="custom-table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>DNI</th>
+                                    <th>Edad</th>
+                                    <th>Obra social</th>
+                                    <th>Correo</th>
+                                    <th>Imagen 1</th>
+                                    <th>Imagen 2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let p of pacientes">
+                                    <td>{{ p.nombre }}</td>
+                                    <td>{{ p.apellido }}</td>
+                                    <td>{{ p.dni }}</td>
+                                    <td>{{ p.edad }}</td>
+                                    <td>{{ p.obraSocial }}</td>
+                                    <td>{{ p.mail }}</td>
+                                    <td><img src="{{ p.imagenUno }}" width="30px" alt=""></td>
+                                    <td><img src="{{ p.imagenDos }}" width="30px" alt=""></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h2 class="title-table mt-5">Especialistas</h2>
+                    <div class="custom-table">
+                        <table class="table custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>DNI</th>
+                                    <th>Edad</th>
+                                    <th>Especialidad</th>
+                                    <th>Correo</th>
+                                    <th>Imagen</th>
+                                    <th>Habilitado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let e of especialistas">
+                                    <td>{{ e.nombre }}</td>
+                                    <td>{{ e.apellido }}</td>
+                                    <td>{{ e.dni }}</td>
+                                    <td>{{ e.edad }}</td>
+                                    <td>{{ e.especialidad }}</td>
+                                    <td>{{ e.mail }}</td>
+                                    <td><img src="{{ e.imagenUno }}" width="30px" alt=""></td>
+                                    <td>
+                                        @if (e.habilitado) {
+                                            <div class="d-flex justify-content-between">
+                                                <img src="../../../assets/check.png" class="check-uncheck checked" alt="Si">
+                                            </div>
+                                        } @else {
+                                            <div class="d-flex justify-content-between">
+                                            <img src="../../../assets/uncheck.png" class="check-uncheck" alt="No" (click)="cambiarHabilitacion(e)">
+                                            </div>
+                                        }
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h2 class="title-table mt-5">Administradores</h2>
+                    <div class="custom-table">
+                        <table class="table custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>DNI</th>
+                                    <th>Edad</th>
+                                    <th>Correo</th>
+                                    <th>Imagen</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let a of admins">
+                                    <td>{{ a.nombre }}</td>
+                                    <td>{{ a.apellido }}</td>
+                                    <td>{{ a.dni }}</td>
+                                    <td>{{ a.edad }}</td>
+                                    <td>{{ a.mail }}</td>
+                                    <td><img src="{{ a.imagenUno }}" width="30px" alt=""></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-            <h2 class="title-table">Especialistas</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>DNI</th>
-                        <th>Edad</th>
-                        <th>Especialidad</th>
-                        <th>Correo</th>
-                        <th>Habilitado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let e of especialistas">
-                        <td>{{ e.nombre }}</td>
-                        <td>{{ e.apellido }}</td>
-                        <td>{{ e.dni }}</td>
-                        <td>{{ e.edad }}</td>
-                        <td>{{ e.especialidad }}</td>
-                        <td>{{ e.mail }}</td>
-                        <td>
-                            @if (e.habilitado) {
-                                <div class="d-flex justify-content-between">
-                                    <img src="../../../assets/check.png" class="check-uncheck" alt="Si" (click)="cambiarHabilitacion(e)">
-                                </div>
-                            } @else {
-                                <div class="d-flex justify-content-between">
-                                 <img src="../../../assets/uncheck.png" class="check-uncheck" alt="No" (click)="cambiarHabilitacion(e)">
-                                </div>
-                            }
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
 
-            <h2 class="title-table">Administradores</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>DNI</th>
-                        <th>Edad</th>
-                        <th>Correo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let a of admins">
-                        <td>{{ a.nombre }}</td>
-                        <td>{{ a.apellido }}</td>
-                        <td>{{ a.dni }}</td>
-                        <td>{{ a.edad }}</td>
-                        <td>{{ a.mail }}</td>
-                    </tr>
-                </tbody>
-            </table>
+                    <div class="container d-flex justify-content-around my-5">
+                        <button class="btn btn-outline-primary btn-custom" routerLink="../registro-admin">Agregar nuevo usuario</button>
+                    </div>
 
-
-
-
-
-
+            </div>
+        </div>
         </div>
     </div>
 </div>
+    
 
 <!-- <div class="container d-flex justify-content-around mt-5">
     <div class="jumbotron">

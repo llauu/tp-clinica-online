@@ -1,0 +1,62 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="medium" color="#fff" type="ball-clip-rotate"></ngx-spinner>
+        <div class="col-12 reg-container card-top mb-5">
+        <div class="card shadow mt-5">
+            <div class="card-header">
+                <h1 class="title-perfil text-center my-5">Mi perfil</h1>
+            </div>
+
+            <div class="card-body d-flex flex-column justify-content-center align-items-center mt-5">
+
+                <div class="container row">
+                    <div class="col-6">
+                        <h2 class="subtitle">Datos del {{user.rol}}</h2>
+
+                        <div>
+                            <p class="lbl-dato mb-0">Nombre y apellido</p>
+                            <p class="dato">{{user.nombre}} {{user.apellido}}</p>
+                        </div>
+                        <div>
+                            <p class="lbl-dato mb-0">Edad</p>
+                            <p class="dato">{{user.edad}} años</p>
+                        </div>
+                        <div>
+                            <p class="lbl-dato mb-0">DNI</p>
+                            <p class="dato">{{user.dni}}</p>
+                        </div>
+                        <div>
+                            <p class="lbl-dato mb-0">Correo electronico</p>
+                            <p class="dato">{{user.mail}}</p>
+                        </div>
+
+                        <div class="mt-5" *ngIf="user.rol === 'especialista'">
+                            <h2 class="subtitle">Mis horarios</h2>
+                            <div>
+                                <p class="lbl-espe mb-0">{{user.especialidad}}</p>
+
+                                <form [formGroup]="horariosForm" (ngSubmit)="guardarHorariosEspecialista()" class="w-50">
+                                    <p class="dato mb-0">Entrada</p>
+                                    <input type="time" formControlName="entrada" class="form-control" placeholder="Hora">
+                                    <p class="dato mb-0 mt-3">Salida</p>
+                                    <input type="time" formControlName="salida" class="form-control" placeholder="Hora">
+
+                                    <input type="submit" value="Guardar" class="btn btn-primary mt-3">
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-6">
+                        <img src="{{user.imagenUno}}" class="col-7 float-end me-5 mb-5 custom-img" alt="Imagen 1">
+                        <img src="{{user.imagenDos}}" *ngIf="user.rol === 'paciente'" class="col-7 float-end me-5 mb-5 custom-img" alt="Imagen 2">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </div>
+    </div>
+</div>

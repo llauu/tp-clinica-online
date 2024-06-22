@@ -1,7 +1,11 @@
 @import 'ngx-toastr/toastr';
 
 .main {
-    background-color: #e7e7e7;
+    background-image: url('assets/fondo.jpg');
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     height: 100%;
     font-family: "Radio Canada Big", sans-serif;
     margin: 0;

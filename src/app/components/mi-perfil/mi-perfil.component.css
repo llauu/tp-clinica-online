@@ -1,0 +1,42 @@
+.title-perfil {
+    margin-top: 70px;
+    font-size: 70px;
+}
+
+.card {
+    background-color: rgba(0, 0, 0, 0.7); 
+    color: aliceblue;
+}
+
+.subtitle {
+    font-size: 40px;
+    color: #ffffff;
+}
+
+.card-header {
+    background-color: rgba(0, 0, 0, 0.5); 
+    border: none;
+}
+
+.card-top {
+    margin-top: 120px;
+}
+
+.lbl-dato {
+    color: #b8b8b8;
+    font-size: 21px;
+}
+
+.dato {
+    color: #dadada;
+    font-size: 20px;
+}
+
+.custom-img {
+    border: solid 2px #ffffff;
+}
+
+.lbl-espe {
+    color: #b8b8b8;
+    font-size: 27px;
+}

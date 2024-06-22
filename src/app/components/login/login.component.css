@@ -36,3 +36,18 @@
     color: #ff0000;
     position: absolute;   
 }
+
+.btn-acc-rap {
+    padding: 0;
+    border: solid 1px #292929;
+}
+
+.img-acc-rap {
+    width: 100px;
+    height: 100px;
+}
+
+.p-acc-rap {
+    width: 124px;
+    margin: 0;
+}

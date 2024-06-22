@@ -8,11 +8,14 @@ import { DniService } from '../../services/dni.service';
 import { NgIf } from '@angular/common';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { Firestore, collectionData } from '@angular/fire/firestore';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
+import { NgxCaptchaModule } from 'ngx-captcha';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf],
+  imports: [ReactiveFormsModule, NgIf, NgxSpinnerModule, NgxCaptchaModule],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.css'
 })
@@ -24,8 +27,15 @@ export class RegistroComponent {
   user: any;
   form: any;
   especialidades: any;
+  siteKey: string = '6LelmP4pAAAAAIRCS57ZV2nSRNip3kdHbSbwIRnt';
 
-  constructor(private firestore: Firestore, private authService: AuthService, private router: Router, private dniService: DniService) {}
+  constructor(private firestore: Firestore, 
+              private authService: AuthService, 
+              private router: Router, 
+              private dniService: DniService, 
+              private spinner: NgxSpinnerService, 
+              private toastrSvc: ToastrService) {}
+
 
   ngOnInit() {
     this.traerEspecialidades();
@@ -38,10 +48,10 @@ export class RegistroComponent {
       this.form = new FormGroup ({
         nombre: new FormControl('', [Validators.pattern('^[a-zA-Z]+$'), Validators.required]),
         apellido: new FormControl('', [Validators.pattern('^[a-zA-Z]+$'), Validators.required]),
-        edad: new FormControl('', [Validators.required, Validators.min(0), Validators.max(120)]),
+        edad: new FormControl('', [Validators.required, Validators.pattern('^[0-9]+$'), Validators.min(0), Validators.max(120)]),
         dni: new FormControl('', {
           validators: [Validators.required, Validators.pattern('^[0-9]+$')],
-          asyncValidators: dniExisteAsyncValidator(this.dniService, 'pacientes'),
+          asyncValidators: dniExisteAsyncValidator(this.dniService, 'usuarios'),
           updateOn: 'blur'
         }),
         obraSocial: new FormControl('', [Validators.required]),
@@ -50,6 +60,7 @@ export class RegistroComponent {
         passRep: new FormControl('', [Validators.required]),
         imagenUno: new FormControl('', [Validators.required]),
         imagenDos: new FormControl('', [Validators.required]),
+        recaptcha: new FormControl('', [Validators.required])
       });
     }
     else {
@@ -58,10 +69,10 @@ export class RegistroComponent {
       this.form = new FormGroup ({
         nombre: new FormControl('', [Validators.pattern('^[a-zA-Z]+$'), Validators.required]),
         apellido: new FormControl('', [Validators.pattern('^[a-zA-Z]+$'), Validators.required]),
-        edad: new FormControl('', [Validators.required, Validators.min(0), Validators.max(120)]),
+        edad: new FormControl('', [Validators.required, Validators.pattern('^[0-9]+$'), Validators.min(0), Validators.max(120)]),
         dni: new FormControl('', {
           validators: [Validators.required, Validators.pattern('^[0-9]+$')],
-          asyncValidators: dniExisteAsyncValidator(this.dniService, 'especialistas'),
+          asyncValidators: dniExisteAsyncValidator(this.dniService, 'usuarios'),
           updateOn: 'blur'
         }),
         especialidad: new FormControl('', [Validators.required]),
@@ -69,6 +80,7 @@ export class RegistroComponent {
         pass: new FormControl('', [Validators.required]),
         passRep: new FormControl('', [Validators.required]),
         imagenUno: new FormControl('', [Validators.required]),
+        recaptcha: new FormControl('', [Validators.required])
       });
     }
   }
@@ -85,85 +97,82 @@ export class RegistroComponent {
 
   register() {
     if(this.form.get('pass')!.value == this.form.get('passRep')!.value) {
-      this.authService.register(this.form.get('mail')!.value, this.form.get('pass')!.value)
-        .then(res => {
-          if(this.regPaciente) {
-            this.user = {
-              uid: res.user.uid,
-              nombre: this.form.get('nombre')!.value,
-              apellido: this.form.get('apellido')!.value,
-              edad: this.form.get('edad')!.value,
-              dni: this.form.get('dni')!.value,
-              rol: 'Paciente',
-              obraSocial: this.form.get('obraSocial')!.value,
-              mail: this.form.get('mail')!.value,
-              pass: this.form.get('pass')!.value,
-              imagenUno: 'this.imagenUno',
-              imagenDos: 'this.imagenDos'
+      this.spinner.show();
+
+      let nombre = this.form.get('nombre')!.value;
+      let apellido = this.form.get('apellido')!.value;
+      let edad = this.form.get('edad')!.value;
+      let dni = this.form.get('dni')!.value;
+      let tmp = this.regPaciente ? this.form.get('obraSocial')!.value : this.form.get('especialidad')!.value
+      let mail = this.form.get('mail')!.value;
+      let pass = this.form.get('pass')!.value;
+
+      if(this.regPaciente === false) {
+        this.user = {uid: 'null', nombre, apellido, edad, dni, rol: 'especialista', especialidad: tmp, mail, pass, imagenUno: '', habilitado: false};
+        
+        this.addNewUser(this.user); 
+        this.spinner.hide();
+        
+        this.toastrSvc.success('Debe esperar a que un administrador habilite su cuenta para iniciar sesion.', 'Especialista registrado');
+      }
+      else {
+        this.authService.register(mail, pass)
+          .then((res: any) => {
+            this.user = {uid: res, nombre, apellido, edad, dni, rol: 'paciente', obraSocial: tmp, mail, pass, imagenUno: '', imagenDos: ''};
+            
+            this.spinner.hide();
+
+            this.addNewUser(this.user);
+            this.toastrSvc.success('Verifica tu correo electronico para poder iniciar sesion.', 'Paciente registrado');
+            this.router.navigate(['/login']);
+          })
+          .catch(err => {
+            switch(err.code) {
+              case 'auth/invalid-email': 
+                this.errorMsg = 'El correo electronico no es valido.';
+                break;
+
+              case 'auth/missing-password': 
+                this.errorMsg = 'La contraseña no es valida.';
+                break;
+                
+              case 'auth/email-already-in-use': 
+                this.errorMsg = 'El correo electronico ya esta en uso.';
+                break;
+
+              case 'auth/weak-password': 
+                this.errorMsg = 'La contraseña debe tener al menos 6 caracteres.';
+                break;
             }
-          }
-          else {
-            this.user = {
-              uid: res.user.uid,
-              nombre: this.form.get('nombre')!.value,
-              apellido: this.form.get('apellido')!.value,
-              edad: this.form.get('edad')!.value,
-              dni: this.form.get('dni')!.value,
-              rol: 'Especialista',
-              especialidad: this.form.get('especialidad')!.value,
-              mail: this.form.get('mail')!.value,
-              pass: this.form.get('pass')!.value,
-              imagenUno: 'this.imagenUno',
-              habilitado: false
-            }
-          }
-
-          this.addNewUser(this.user);
-          this.router.navigate(['/bienvenida']);
-        })  
-        .catch(err => {
-          switch(err.code) {
-            case 'auth/invalid-email': 
-              this.errorMsg = 'El correo electronico no es valido.';
-              break;
-
-            case 'auth/missing-password': 
-              this.errorMsg = 'La contraseña no es valida.';
-              break;
-              
-            case 'auth/email-already-in-use': 
-              this.errorMsg = 'El correo electronico ya esta en uso.';
-              break;
-
-            case 'auth/weak-password': 
-              this.errorMsg = 'La contraseña debe tener al menos 6 caracteres.';
-              break;
-          }
-        });
+            
+            this.spinner.hide();
+          });
+      }
     }
     else {
-      console.log('Las contraseñas no coinciden.');
+      this.errorMsg = 'Las contraseñas no coinciden.';
     }
   }
 
   
   async addNewUser(user: any) {
-    if(user.rol == 'Paciente') {  
+    if(user.rol == 'paciente') {  
       user.imagenUno = await this.saveImage(this.imagenUno, user.uid + '/imagenUno');
       user.imagenDos = await this.saveImage(this.imagenDos, user.uid + '/imagenDos');
 
-      let col = collection(getFirestore(), 'pacientes');
-      addDoc(col, user)
-        .then((res) => {
-          console.log(res.id);
-        });
+      // let col = collection(getFirestore(), 'pacientes');
+      // addDoc(col, user);
     }
-    else if (user.rol == 'Especialista') {
+    else if (user.rol == 'especialista') {
       user.imagenUno = await this.saveImage(this.imagenUno, user.uid + '/imagenUno');
 
-      let col = collection(getFirestore(), 'especialistas');
-      addDoc(col, user);
+      // let col = collection(getFirestore(), 'especialistas');
+      // addDoc(col, user);
     }
+
+    
+    let col = collection(getFirestore(), 'usuarios');
+    addDoc(col, user);
   }
 
   async saveImage(foto: any, path: string) {
@@ -209,4 +218,7 @@ export class RegistroComponent {
     }
   }
 
+  cancelarRegistro() {
+    this.regPaciente = null;
+  }
 }

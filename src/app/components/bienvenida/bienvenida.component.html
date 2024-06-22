@@ -1,11 +1,12 @@
-
-<div class="main-bienv d-flex justify-content-center">
+<div class="main-bienv d-flex justify-content-center align-items-center">
     <div class="info-main d-flex flex-column justify-content-center align-items-center">
         <h1 class="tit-main mb-5">Bienvenido/a</h1>
-        <p class="text-center">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe consectetur itaque, consequatur possimus excepturi doloremque! Tenetur, quibusdam necessitatibus! Iusto culpa ratione vero labore earum officiis asperiores illo cum! Repellendus, officia?</p>
-        <div class="d-flex  w-50">
-            <button class="btn btn-custom btn-outline-danger mx-4" routerLink="../register">Registrarse</button>
-            <button class="btn btn-custom btn-secondary mx-4" routerLink="../login">Iniciar Sesion</button>
+        <p class="text-center sub-tit">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe consectetur itaque, consequatur possimus excepturi doloremque! Tenetur, quibusdam necessitatibus! Iusto culpa ratione vero labore earum officiis asperiores illo cum! Repellendus, officia?</p>
+        <div class="d-flex mt-5">
+            <button class="btn btn-custom btn-outline-danger mx-4" routerLink="../register" *ngIf="!isLoggedIn">Registrarse</button>
+            <button class="btn btn-custom btn-primary mx-4" routerLink="../login" *ngIf="!isLoggedIn">Iniciar Sesion</button>
         </div>
+        
+        <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="medium" color="#fff" type="ball-clip-rotate"></ngx-spinner>
     </div>
 </div>

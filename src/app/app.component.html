@@ -9,34 +9,48 @@
   <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
     <ul class="navbar-nav nav-opt">
       <li class="nav-item mx-3">
-        <a class="nav-link" routerLink="bienvenida" routerLinkActive="ruta-activa">Inicio</a>
+        <button class="nav-link" routerLink="bienvenida" routerLinkActive="ruta-activa">Inicio</button>
       </li>
-      <li class="nav-item mx-3">
-        <a class="nav-link" routerLink="usuarios" routerLinkActive="ruta-activa">Usuarios</a>
+      <li class="nav-item mx-3" *ngIf="rol === 'admin'">
+        <button class="nav-link" routerLink="usuarios" routerLinkActive="ruta-activa">Usuarios</button>
       </li>
+      <li class="nav-item mx-3" *ngIf="rol === 'admin'">
+        <button class="nav-link" routerLink="turnos" routerLinkActive="ruta-activa">Turnos</button>
+      </li>
+      <li class="nav-item mx-3" *ngIf="rol === 'paciente' || rol === 'especialista'">
+        <button class="nav-link" routerLink="mis-turnos" routerLinkActive="ruta-activa">Mis turnos</button>
+      </li>
+      <li class="nav-item mx-3" *ngIf="rol === 'admin' || rol === 'paciente'">
+        <button class="nav-link" routerLink="solicitar-turno" routerLinkActive="ruta-activa">Solicitar turno</button>
+      </li>
+      <li class="nav-item mx-3" *ngIf="isLoggedIn">
+        <button class="nav-link" routerLink="mi-perfil" routerLinkActive="ruta-activa">Mi perfil</button>
+      </li>
+
 
       @if(this.isLoggedIn) {
         <li class="nav-item dropdown mx-3 d-flex ">
-          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+          <img src="../assets/user-icon.png" width="40px" alt="">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            
+          </a>
           
           <div class="dropdown-menu dropdown-menu-end mb-3 rounded-bottom" aria-labelledby="navbarDropdown">
             <div class="col text-center">
               <img src="{{userInfo.imagenUno}}" width="100" alt="Perfil">
             </div>
+            <span class="dropdown-item-text">{{ userInfo.nombre }} {{ userInfo.apellido }}</span> 
             <span class="dropdown-item-text">{{ user.email }}</span> 
+            <span class="dropdown-item-text">Perfil de {{ rol }}</span> 
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" (click)="logout()"><b>Cerrar sesion</b></a> 
+            <a class="dropdown-item" (click)="logout()"><b class="logout-text">Cerrar sesion</b></a> 
           </div>
-        </li>
-      }
-      @else {
-        <li class="nav-item mx-3">
-          <a class="nav-link" routerLink="login" routerLinkActive="ruta-activa">Iniciar sesion</a>
         </li>
       }
     </ul>
   </div>
 </nav>
 
+<ngx-spinner bdColor="rgba(0,0,0,0.8)" size="medium" color="#fff" type="ball-clip-rotate"></ngx-spinner>
 
 <router-outlet />

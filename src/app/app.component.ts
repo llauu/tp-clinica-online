@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth.service';
-import { Firestore, addDoc, collection, collectionData, getDocs, orderBy, query } from '@angular/fire/firestore';
-import { where } from 'firebase/firestore';
+import { NgxSpinnerService, NgxSpinnerModule } from 'ngx-spinner';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, NgxSpinnerModule, NgIf],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -15,64 +15,57 @@ export class AppComponent {
   title = 'tp-clinica-online';
   user: any;
   userInfo: any;
+  rol: string = '';
   isLoggedIn: boolean = false;
 
-  constructor(public authService: AuthService, private router: Router, private firestore: Firestore) {
+  constructor(public authService: AuthService, private router: Router, private spinner: NgxSpinnerService) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.checkAuthState();
       }
     });
   }
+
+  ngOnInit() {
+    this.spinner.show();
+    this.checkAuthState();
+  }
   
   checkAuthState() {
+    this.spinner.show();
     this.authService.isAuthenticated()
       .then(res => {
         if(res !== null) {
           this.isLoggedIn = true;
-          // this.user = this.authService.getUser();
           this.user = res;
-          this.getUserInfo('Paciente', res.uid);
+
+          this.authService.getUserInfo()
+            .then((userInfo: any) => { 
+              this.userInfo = userInfo;
+              this.rol = userInfo.rol;
+
+              this.spinner.hide();
+            })
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err)
+
+        this.spinner.hide();
+      });
+      
+      this.spinner.hide();
   }
 
   logout() {
     this.authService.logout()
       .then(() => {
         this.isLoggedIn = false;
+        this.user = null;
+        this.userInfo = null;
+        this.rol = '';
         this.router.navigate(['/login'])
       })
       .catch(err => console.log(err));
-  }
-
-  async getUserInfo(rol: string, uid: string) {
-    let coleccion;
-    console.log('inicio')
-    console.log(rol)
-    switch(rol) {
-      case 'Paciente':
-        coleccion = 'pacientes';
-        break;
-      case 'Especialista':
-        coleccion = 'especialistas';
-        break;
-      case 'Admin':
-        coleccion = 'admins';
-        break;
-      default:
-        coleccion = ''; 
-    }
-
-    const docRef = collection(this.firestore, coleccion);
-
-    const q = query(docRef, where('uid', '==', uid));
-
-    const querySnapshot = await getDocs(q);
-
-    if (!querySnapshot.empty) {
-      this.userInfo = querySnapshot.docs[0].data();
-    }
   }
 }
